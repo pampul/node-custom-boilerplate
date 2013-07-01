@@ -21,7 +21,7 @@ Regardless to Node Boilerplate, we use the same dependencies, but adding some li
 
 **1. Clone the repository and execute the shell**
 
-  git clone https://github.com/Argetloum/node-arget-boilerplate.git mynewproject
+  	git clone https://github.com/Argetloum/node-arget-boilerplate.git mynewproject
 	cd mynewproject
 	./initproject.sh
 
