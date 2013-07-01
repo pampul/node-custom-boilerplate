@@ -1,8 +1,3 @@
-/**
- * User: Flo
- * Date: 24/06/13
- * Time: 23:32
- */
 var exports = module.exports;
 
 exports.init = function(env){

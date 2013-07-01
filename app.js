@@ -4,11 +4,14 @@ var connect = require('connect')
   , io = require('socket.io')
   , port = (process.env.PORT || 8081);
 
+// Set the environment (production, test or development)
+var envNode = 'development';
+
 // Get the project environment
-var env = require('./config/init.js').initProject(io, express, connect, port);
+var env = require('./config/init.js').initProject(io, express, connect, port, envNode);
 
 // Setup routes
-require('./config/router.js').createRoutes(env.server);
+require('./config/routes.js')(env.app);
 
-// Call the server controller
+// Launch server listener
 require('./app/server/server.js').init(env);

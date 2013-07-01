@@ -1,40 +1,59 @@
 var exports = module.exports;
 
 // Set usefull variables
-exports.initProject = function (io, express, connect, port) {
+exports.initProject = function (io, express, connect, port, envNode) {
+
+  // Get config
+  // Load configurations
+  // if test env, load example file
+  var env = process.env.NODE_ENV || envNode
+    , config = require('./config')[env]
+    , mongoose = require('mongoose')
+    , fs = require('fs')
+
+
+  console.log('Config DB : ' + config.db);
+
+  mongoose.connection.on('open', function (ref) {
+    console.log('Connected to mongo server.');
+  });
+  mongoose.connection.on('error', function (err) {
+    console.log('Could not connect to mongo server!');
+    console.log(err);
+    throw (err);
+  });
+
+  // Bootstrap db connection
+  mongoose.connect(config.db)
+
+  // Bootstrap models
+  var modelsPath = './app/models'
+  fs.readdirSync(modelsPath).forEach(function (file) {
+    if (~file.indexOf('.js')) require('../app/models' + '/' + file)
+  })
+
+  // Get port
+  var port = process.env.PORT || 3000
 
   // Setup Express
-  var server = express.createServer();
-  server.configure(function () {
-    server.set('views', './app/views');
-    server.set('view options', { layout: false });
-    server.use(connect.bodyParser());
-    server.use(express.cookieParser());
-    server.use(express.session({ secret: "shhhhhhhhh!"}));
-    server.use(connect.static('./public'));
-    server.use(server.router);
-  });
+  var app = express();
 
-// Setup the errors
-  server.error(function (err, req, res, next) {
-    if (err instanceof NotFound) {
-      res.render('404.jade', { locals: {
-        title: '404 - Not Found', description: '', author: '', analyticssiteid: 'XXXXXXX'
-      }, status: 404 });
-    } else {
-      res.render('500.jade', { locals: {
-        title: 'The Server Encountered an Error', description: '', author: '', analyticssiteid: 'XXXXXXX', error: err
-      }, status: 500 });
-    }
-  });
+  var http = require('http')
+    , server = http.createServer(app)
+    , io = require('socket.io').listen(server);
+
+
+  // Start the app by listening on <port>
+  console.log('Express app started on port '+port)
   server.listen(port);
 
-// Setup Socket.IO
-  var io = io.listen(server);
+  app.use(connect.static('./public'));
+  require('./express.js')(app, config);
+
 
   var project = new Object();
 
-  project.server = server;
+  project.app = app;
   project.express = express;
   project.port = port;
   project.connect = connect;
@@ -42,10 +61,4 @@ exports.initProject = function (io, express, connect, port) {
 
   return project;
 
-}
-
-function NotFound(msg) {
-  this.name = 'NotFound';
-  Error.call(this, msg);
-  Error.captureStackTrace(this, arguments.callee);
 }
