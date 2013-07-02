@@ -42,7 +42,6 @@ This will copy down all of the boilerplate files, organize them appropriately an
 	|   |- views
 	|
 	|- config
-	|- lib
 	|- public
 	|   |- css
 	|   |- img
