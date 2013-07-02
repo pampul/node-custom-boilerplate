@@ -23,7 +23,6 @@ Regardless to Node Boilerplate, we use the same dependencies, but adding some li
 
   	git clone https://github.com/Argetloum/node-arget-boilerplate.git mynewproject
 	cd mynewproject
-	./initproject.sh
 
 This will copy down all of the boilerplate files, organize them appropriately and init a fresh new git repository within which you can build your next big thing.
 
