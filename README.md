@@ -50,3 +50,4 @@ This will copy down all of the boilerplate files, organize them appropriately an
 	|
 	|- test
 
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/ead75d0b20efaeafd0d50de1eeeddcff "githalytics.com")](http://githalytics.com/Argetloum/node-custom-boilerplate)
